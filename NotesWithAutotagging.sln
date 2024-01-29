@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotesWithAutotagging.Infras
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotesWithAutotagging.Contracts", "NotesWithAutotagging.Contracts\NotesWithAutotagging.Contracts.csproj", "{93951790-4AD8-41F6-ADC0-6A6E069A3AB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotesWithAutotagging.Database", "NotesWithAutotagging.Database\NotesWithAutotagging.Database.csproj", "{DE9B5C6B-97CE-4B9C-B61F-567AB84B67FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotesWithAutotagging.Database", "NotesWithAutotagging.Database\NotesWithAutotagging.Database.csproj", "{DE9B5C6B-97CE-4B9C-B61F-567AB84B67FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
