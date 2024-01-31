@@ -9,6 +9,7 @@ namespace NotesWithAutotagging.Api.Configuration
         public static void AddRepositories(this IServiceCollection services)
         {
             services.AddNotesRepository();
+            services.AddUsersRepository();
         }
     }
 }

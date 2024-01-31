@@ -1,26 +1,25 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
 using NotesWithAutotagging.Contracts.Models;
 using NotesWithAutotagging.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace NotesWithAutotagging.Infrastructure.Notes
 {
     internal class NotesRepository : INotesRepository
     {
         private readonly NotesWithAutotaggingDbContext notesWithAutotaggingDbContext;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public NotesRepository(NotesWithAutotaggingDbContext notesWithAutotaggingDbContext)
+        public NotesRepository(NotesWithAutotaggingDbContext notesWithAutotaggingDbContext, IHttpContextAccessor httpContextAccessor)
         {
             this.notesWithAutotaggingDbContext = notesWithAutotaggingDbContext;
+            this.httpContextAccessor = httpContextAccessor;
         }
         public Note CreateNote(string note)
         {
-            var user = notesWithAutotaggingDbContext.Users.First(p => p.Id == 1);
+            int userId;
+            int.TryParse(httpContextAccessor.HttpContext.User.FindFirstValue("id"), out userId);
+            var user = notesWithAutotaggingDbContext.Users.First(p => p.Id == userId);
             AutoTagger autoTagger = new AutoTagger(note);
             var tags = autoTagger.TagNote();
             var noteDb = new Database.Models.Note
@@ -41,7 +40,9 @@ namespace NotesWithAutotagging.Infrastructure.Notes
 
         public bool DeleteNote(int id)
         {
-            var note = notesWithAutotaggingDbContext.Notes.FirstOrDefault(s => s.User.Id == 1 && s.Id == id);
+            int userId;
+            int.TryParse(httpContextAccessor.HttpContext.User.FindFirstValue("id"), out userId);
+            var note = notesWithAutotaggingDbContext.Notes.FirstOrDefault(s => s.User.Id == userId && s.Id == id);
             if (note == null)
                 return false;
             notesWithAutotaggingDbContext.Remove(note);
@@ -51,7 +52,9 @@ namespace NotesWithAutotagging.Infrastructure.Notes
 
         public Note EditNote(int noteId, string note)
         {
-            var noteDb = notesWithAutotaggingDbContext.Notes.FirstOrDefault(s => s.User.Id == 1 && s.Id == noteId);
+            int userId;
+            int.TryParse(httpContextAccessor.HttpContext.User.FindFirstValue("id"), out userId);
+            var noteDb = notesWithAutotaggingDbContext.Notes.FirstOrDefault(s => s.User.Id == userId && s.Id == noteId);
             if (noteDb == null)
                 return null;
             noteDb.Content = note;
@@ -72,13 +75,17 @@ namespace NotesWithAutotagging.Infrastructure.Notes
 
         public Note GetNote(int id)
         {
-            var noteDb = notesWithAutotaggingDbContext.Notes.FirstOrDefault(s => s.User.Id == 1 && s.Id == id);
+            int userId;
+            int.TryParse(httpContextAccessor.HttpContext.User.FindFirstValue("id"), out userId);
+            var noteDb = notesWithAutotaggingDbContext.Notes.FirstOrDefault(s => s.User.Id == userId && s.Id == id);
             return noteDb?.ToContractNote();
         }
 
         public IEnumerable<Note> GetNotes()
         {
-            var notesDb = notesWithAutotaggingDbContext.Notes.Where(s => s.User.Id == 1).ToList();
+            int userId;
+            int.TryParse(httpContextAccessor.HttpContext.User.FindFirstValue("id"), out userId);
+            var notesDb = notesWithAutotaggingDbContext.Notes.Where(s => s.User.Id == userId).ToList();
             return notesDb.Select(p => p.ToContractNote());
         }
     }

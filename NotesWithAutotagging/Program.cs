@@ -27,7 +27,8 @@ namespace NotesWithAutotagging.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddAuthentication(builder.Configuration);
-            builder.Services.AddRepositories();
+            builder.Services.AddRepositories(); 
+            builder.Services.AddHttpContextAccessor();
             var app = builder.Build();
             using (var scope = app.Services.CreateScope())
             {
