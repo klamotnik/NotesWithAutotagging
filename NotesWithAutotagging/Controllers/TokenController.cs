@@ -24,9 +24,9 @@ namespace NotesWithAutotagging.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult GenerateToken(string name, string password)
+        public IActionResult GenerateToken([FromBody] Contracts.Requests.User userData)
         {
-            var user = usersRepository.GetUser(name, password);
+            var user = usersRepository.GetUser(userData.Name, userData.Password);
             if (user == null)
                 return Unauthorized();
             var issuer = configuration["Jwt:Issuer"];

@@ -35,14 +35,14 @@ namespace NotesWithAutotagging.Controllers
         }
 
         [HttpPut]
-        public IActionResult Create(string note)
+        public IActionResult Create([FromBody]string note)
         {
             var createdNote = notesRepository.CreateNote(note);
             return Ok(createdNote);
         }
 
         [HttpPost("{id}")]
-        public IActionResult Update(int id, string note)
+        public IActionResult Update(int id, [FromBody] string note)
         {
             var editedNote = notesRepository.EditNote(id, note);
             if (editedNote == null)

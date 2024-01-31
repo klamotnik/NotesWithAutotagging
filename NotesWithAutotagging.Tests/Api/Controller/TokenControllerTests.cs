@@ -22,7 +22,7 @@ namespace NotesWithAutotagging.Tests.Api.Controller
             var controller = new TokenController(mockRepo.Object, mockConfig.Object);
 
             // Act
-            var result = controller.GenerateToken("dev", "123456");
+            var result = controller.GenerateToken(new() { Name = "dev", Password = "123456" });
 
             // Assert
             var unauthorizedResult = result as UnauthorizedResult;
@@ -41,7 +41,7 @@ namespace NotesWithAutotagging.Tests.Api.Controller
             var controller = new TokenController(mockRepo.Object, mockConfig.Object);
 
             // Act
-            var result = controller.GenerateToken("dev", "123456");
+            var result = controller.GenerateToken(new() { Name = "dev", Password = "123456" });
 
             // Assert
             var okObjectResult = result as OkObjectResult;
