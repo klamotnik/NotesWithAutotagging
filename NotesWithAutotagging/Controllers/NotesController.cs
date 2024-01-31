@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using NotesWithAutotagging.Api;
-using NotesWithAutotagging.Contracts.Models;
-using NotesWithAutotagging.Database;
+using NotesWithAutotagging.Infrastructure.Notes;
 
 namespace NotesWithAutotagging.Controllers
 {
@@ -13,27 +12,25 @@ namespace NotesWithAutotagging.Controllers
     public class NotesController : ControllerBase
     {
         private readonly ILogger<NotesController> _logger;
-        private readonly NotesWithAutotaggingDbContext dbContext;
+        private readonly INotesRepository notesRepository;
 
-        public NotesController(ILogger<NotesController> logger, NotesWithAutotaggingDbContext dbContext)
+        public NotesController(ILogger<NotesController> logger, INotesRepository notesRepository)
         {
             _logger = logger;
-            this.dbContext = dbContext;
+            this.notesRepository = notesRepository;
         }
 
         [HttpGet]
         public IActionResult GetList()
         {
-            var id = User.Claims.First(p => p.Type == "id").Value;
-            var notes = dbContext.Notes.Where(s => s.User.Id == int.Parse(id)).ToList();
+            var notes = notesRepository.GetNotes();
             return Ok(notes);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetItem(int id)
         {
-            var userId = User.Claims.First(p => p.Type == "id").Value;
-            var note = dbContext.Notes.FirstOrDefault(s => s.User.Id == int.Parse(userId) && s.Id == id);
+            var note = notesRepository.GetNote(id);
             if (note == null)
                 return NotFound();
             return Ok(note);
@@ -42,26 +39,25 @@ namespace NotesWithAutotagging.Controllers
         [HttpPut]
         public IActionResult Create(string note)
         {
-            var userId = User.Claims.First(p => p.Type == "id").Value;
-            throw new Exception("Not exist! " + userId + " " + note);
-
+            var createdNote = notesRepository.CreateNote(note);
+            return Ok(createdNote);
         }
 
         [HttpPost("{id}")]
         public IActionResult Update(int id, string note)
         {
-            var userId = User.Claims.First(p => p.Type == "id").Value;
-            throw new Exception("Not exist! " + id + " " + note);
+            var editedNote = notesRepository.EditNote(id, note);
+            if (editedNote == null)
+                return NotFound();
+            return Ok(editedNote);
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var userId = User.Claims.First(p => p.Type == "id").Value;
-            var note = dbContext.Notes.FirstOrDefault(s => s.User.Id == int.Parse(userId) && s.Id == id);
-            if (note == null)
+            var result = notesRepository.DeleteNote(id);
+            if(!result)
                 return NotFound();
-            dbContext.Remove(note);
             return Ok();
         }
     }

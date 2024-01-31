@@ -1,12 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using NotesWithAutotagging.Contracts.Models;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NotesWithAutotagging.Database.Models;
 
 namespace NotesWithAutotagging.Database
 {

@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NotesWithAutotagging.Database.Migrations
 {
     [DbContext(typeof(NotesWithAutotaggingDbContext))]
-    [Migration("20240129233511_AddTables")]
+    [Migration("20240130162823_AddTables")]
     partial class AddTables
     {
         /// <inheritdoc />
@@ -20,11 +20,14 @@ namespace NotesWithAutotagging.Database.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("NotesWithAutotagging.Contracts.Models.Note", b =>
+            modelBuilder.Entity("NotesWithAutotagging.Database.Models.Note", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -46,7 +49,7 @@ namespace NotesWithAutotagging.Database.Migrations
                     b.ToTable("Notes");
                 });
 
-            modelBuilder.Entity("NotesWithAutotagging.Contracts.Models.Tag", b =>
+            modelBuilder.Entity("NotesWithAutotagging.Database.Models.Tag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,7 +71,7 @@ namespace NotesWithAutotagging.Database.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("NotesWithAutotagging.Contracts.Models.User", b =>
+            modelBuilder.Entity("NotesWithAutotagging.Database.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -89,9 +92,9 @@ namespace NotesWithAutotagging.Database.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("NotesWithAutotagging.Contracts.Models.Note", b =>
+            modelBuilder.Entity("NotesWithAutotagging.Database.Models.Note", b =>
                 {
-                    b.HasOne("NotesWithAutotagging.Contracts.Models.User", "User")
+                    b.HasOne("NotesWithAutotagging.Database.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -100,9 +103,9 @@ namespace NotesWithAutotagging.Database.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NotesWithAutotagging.Contracts.Models.Tag", b =>
+            modelBuilder.Entity("NotesWithAutotagging.Database.Models.Tag", b =>
                 {
-                    b.HasOne("NotesWithAutotagging.Contracts.Models.Note", "Note")
+                    b.HasOne("NotesWithAutotagging.Database.Models.Note", "Note")
                         .WithMany("Tags")
                         .HasForeignKey("NoteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -111,7 +114,7 @@ namespace NotesWithAutotagging.Database.Migrations
                     b.Navigation("Note");
                 });
 
-            modelBuilder.Entity("NotesWithAutotagging.Contracts.Models.Note", b =>
+            modelBuilder.Entity("NotesWithAutotagging.Database.Models.Note", b =>
                 {
                     b.Navigation("Tags");
                 });

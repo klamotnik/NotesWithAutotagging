@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace NotesWithAutotagging.Api.Configuration
 {
+    [ExcludeFromCodeCoverage]
     public static class AddAuthenticationConfiguration
     {
         public static void AddAuthentication(this IServiceCollection services, IConfiguration configuration)
