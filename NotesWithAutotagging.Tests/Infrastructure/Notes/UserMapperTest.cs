@@ -1,5 +1,4 @@
 ﻿using NotesWithAutotagging.Database.Models;
-using NotesWithAutotagging.Infrastructure.Notes;
 using NotesWithAutotagging.Infrastructure.Users;
 
 namespace NotesWithAutotagging.Tests.Infrastructure.Notes
@@ -10,7 +9,7 @@ namespace NotesWithAutotagging.Tests.Infrastructure.Notes
         [Test]
         public void UserMapper_FromDatabaseUser_ToContractsNote()
         {
-            var userDb = new Database.Models.User
+            var userDb = new User
             {
                 Id = 1,
                 Name = "dev",
