@@ -11,12 +11,10 @@ namespace NotesWithAutotagging.Controllers
     [Route("/api/notes/")]
     public class NotesController : ControllerBase
     {
-        private readonly ILogger<NotesController> _logger;
         private readonly INotesRepository notesRepository;
 
-        public NotesController(ILogger<NotesController> logger, INotesRepository notesRepository)
+        public NotesController(INotesRepository notesRepository)
         {
-            _logger = logger;
             this.notesRepository = notesRepository;
         }
 
